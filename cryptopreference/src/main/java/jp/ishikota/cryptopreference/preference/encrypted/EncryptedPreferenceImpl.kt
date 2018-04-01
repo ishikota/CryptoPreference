@@ -18,7 +18,7 @@ internal class EncryptedPreferenceImpl(
 
     // return empty string if failed to decrypt
     override fun getString(key: String): String {
-        return if (!plainPreference.hasKey(key)) {
+        return if (!hasKey(key)) {
             ""
         } else {
             val encoded = plainPreference.getString(key)
@@ -26,4 +26,6 @@ internal class EncryptedPreferenceImpl(
             cipher.decrypt(key, encrypted)
         }
     }
+
+    override fun hasKey(key: String) = plainPreference.hasKey(key)
 }

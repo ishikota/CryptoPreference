@@ -6,4 +6,6 @@ interface EncryptedPreference {
 
     fun getString(key: String): String
 
+    fun hasKey(key: String): Boolean
+
 }
