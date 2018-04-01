@@ -22,6 +22,8 @@ internal class PlainPreferenceImpl(private val context: Context, private val deb
         }
     }
 
+    override fun hasKey(key: String): Boolean = pref.contains(key)
+
     override fun clear() {
         pref.all.keys.forEach { delete(it) }
     }

@@ -3,6 +3,8 @@ package jp.ishikota.cryptopreference.preference.plain
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertFalse
+import junit.framework.Assert.assertTrue
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -40,6 +42,13 @@ class PlainPreferenceTest {
         preference.saveString(KEY_STRING, txt)
         preference.delete(KEY_STRING)
         assertEquals("", preference.getString(KEY_STRING))
+    }
+
+    @Test
+    fun testHasKey() {
+        assertFalse(preference.hasKey(KEY_STRING))
+        preference.saveString(KEY_STRING, "hoge")
+        assertTrue(preference.hasKey(KEY_STRING))
     }
 
     @Test

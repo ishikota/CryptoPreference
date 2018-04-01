@@ -8,6 +8,8 @@ internal interface PlainPreference {
 
     fun delete(key: String)
 
+    fun hasKey(key: String): Boolean
+
     fun clear()
 
 }
