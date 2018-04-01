@@ -1,4 +1,4 @@
-package jp.ishikota.cryptopreference
+package jp.ishikota.cryptopreference.sample
 
 import org.junit.Test
 
