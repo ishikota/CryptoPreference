@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4
 import jp.ishikota.cryptopreference.helper.TestKeyContainer
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainer
 import jp.ishikota.cryptopreference.preference.plain.PlainPreference
-import jp.ishikota.cryptopreference.preference.plain.PlainPreferenceImpl
+import jp.ishikota.cryptopreference.preference.plain.PlainPreferenceFactory
 import junit.framework.Assert.assertEquals
 import org.junit.After
 import org.junit.Before
@@ -24,7 +24,7 @@ class CipherLogicTest {
     @Before
     fun setup() {
         val appContext = InstrumentationRegistry.getTargetContext()
-        plainPreference = PlainPreferenceImpl(appContext)
+        plainPreference = PlainPreferenceFactory().create(appContext, debugMode = true)
         keyContainer = TestKeyContainer(listOf(ALIAS_1, ALIAS_2))
         cipherLogic = CipherLogicImpl(plainPreference, keyContainer)
     }

@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4
 import jp.ishikota.cryptopreference.helper.TestCipherLogic
 import jp.ishikota.cryptopreference.preference.encrypted.encoder.Base64Encoder
 import jp.ishikota.cryptopreference.preference.plain.PlainPreference
-import jp.ishikota.cryptopreference.preference.plain.PlainPreferenceImpl
+import jp.ishikota.cryptopreference.preference.plain.PlainPreferenceFactory
 import junit.framework.Assert.assertEquals
 import org.junit.After
 import org.junit.Before
@@ -23,7 +23,7 @@ class EncryptedPreferenceTest {
     fun setup() {
         val appContext = InstrumentationRegistry.getTargetContext()
         val cipher = TestCipherLogic()
-        plainPreference = PlainPreferenceImpl(appContext)
+        plainPreference = PlainPreferenceFactory().create(appContext, debugMode = true)
         val byteArrayEncoder =  Base64Encoder()
         encryptedPreference = EncryptedPreferenceImpl(cipher, plainPreference, byteArrayEncoder)
     }

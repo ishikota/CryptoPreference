@@ -4,7 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 
-internal class PlainPreferenceImpl(private val context: Context, private val debugMode: Boolean = false): PlainPreference {
+internal class PlainPreferenceImpl(
+    private val context: Context,
+    private val preferenceName: String,
+    private val debugMode: Boolean
+): PlainPreference {
 
     override fun saveString(key: String, value: String) {
         pref.edit().putString(key, value).apply()
@@ -29,13 +33,11 @@ internal class PlainPreferenceImpl(private val context: Context, private val deb
     }
 
     private val pref: SharedPreferences
-        get() = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        get() = context.getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
 
     companion object {
 
-        private const val TAG = "PlainPreferenceImpl"
-
-        private const val PREF_NAME = "PlainPreference"
+        private const val TAG = "CryptoPreference"
 
         private const val DEFAULT_STRING = ""
 

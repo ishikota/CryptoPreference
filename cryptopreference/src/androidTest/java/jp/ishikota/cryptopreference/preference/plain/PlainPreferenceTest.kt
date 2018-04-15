@@ -18,7 +18,7 @@ class PlainPreferenceTest {
     @Before
     fun setup() {
         val appContext = InstrumentationRegistry.getTargetContext()
-        preference = PlainPreferenceImpl(appContext)
+        preference = PlainPreferenceFactory().create(appContext, debugMode = false)
     }
 
     @After

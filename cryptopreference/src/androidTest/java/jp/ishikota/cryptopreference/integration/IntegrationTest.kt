@@ -8,7 +8,7 @@ import jp.ishikota.cryptopreference.preference.encrypted.EncryptedPreference
 import jp.ishikota.cryptopreference.preference.encrypted.EncryptedPreferenceImpl
 import jp.ishikota.cryptopreference.preference.encrypted.encoder.Base64Encoder
 import jp.ishikota.cryptopreference.preference.plain.PlainPreference
-import jp.ishikota.cryptopreference.preference.plain.PlainPreferenceImpl
+import jp.ishikota.cryptopreference.preference.plain.PlainPreferenceFactory
 import junit.framework.Assert.assertEquals
 import org.junit.After
 import org.junit.Before
@@ -29,7 +29,7 @@ class IntegrationTest {
     @Before
     fun setup() {
         val appContext = InstrumentationRegistry.getTargetContext()
-        plainPreference = PlainPreferenceImpl(appContext)
+        plainPreference = PlainPreferenceFactory().create(appContext, debugMode = true)
         androidKeyStoreContainer = AndroidKeyStoreContainer()
         cipher = CipherLogicImpl(plainPreference, androidKeyStoreContainer)
         encryptedPreference = EncryptedPreferenceImpl(cipher, plainPreference, Base64Encoder())
