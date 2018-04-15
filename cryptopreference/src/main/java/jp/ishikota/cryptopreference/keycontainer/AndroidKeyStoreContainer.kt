@@ -19,8 +19,13 @@ class AndroidKeyStoreContainer : SecretKeyContainer {
         }
     }
 
-    override fun getOrGenerateNewKey(alias: String, algorithm: String): SecretKey {
-        val keyAlias = genKeyAlias(alias, algorithm)
+    override fun getOrGenerateNewKey(
+        alias: String,
+        algorithm: SecretKeyContainer.Algorithm,
+        blockMode: SecretKeyContainer.BlockMode,
+        padding: SecretKeyContainer.Padding
+    ): SecretKey {
+        val keyAlias = genKeyAlias(alias, algorithm, blockMode, padding)
         if (keystore.containsAlias(keyAlias)) {
             return (keystore.getEntry(keyAlias, null) as KeyStore.SecretKeyEntry).secretKey
         } else {
@@ -35,14 +40,29 @@ class AndroidKeyStoreContainer : SecretKeyContainer {
         }
     }
 
-    override fun deleteKey(alias: String, algorithm: String) {
-        keystore.deleteEntry(genKeyAlias(alias, algorithm))
+    override fun deleteKey(
+        alias: String,
+        algorithm: SecretKeyContainer.Algorithm,
+        blockMode: SecretKeyContainer.BlockMode,
+        padding: SecretKeyContainer.Padding
+    ) {
+        keystore.deleteEntry(genKeyAlias(alias, algorithm, blockMode, padding))
     }
 
-    override fun hasKey(alias: String, algorithm: String): Boolean =
-        keystore.containsAlias(genKeyAlias(alias, algorithm))
+    override fun hasKey(
+        alias: String,
+        algorithm: SecretKeyContainer.Algorithm,
+        blockMode: SecretKeyContainer.BlockMode,
+        padding: SecretKeyContainer.Padding
+    ): Boolean =
+        keystore.containsAlias(genKeyAlias(alias, algorithm, blockMode, padding))
 
-    private fun genKeyAlias(alias: String, algorithm: String) = "${alias}_$algorithm"
+    private fun genKeyAlias(
+        alias: String,
+        algorithm: SecretKeyContainer.Algorithm,
+        blockMode: SecretKeyContainer.BlockMode,
+        padding: SecretKeyContainer.Padding
+    ) = "${alias}_${algorithm.label}_${blockMode.label}_${padding.label}"
 
     companion object {
 
