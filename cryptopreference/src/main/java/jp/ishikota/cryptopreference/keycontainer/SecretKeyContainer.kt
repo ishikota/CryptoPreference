@@ -4,10 +4,10 @@ import java.security.Key
 
 interface SecretKeyContainer {
 
-    fun getKey(alias: String): Key
+    fun getOrGenerateNewKey(alias: String, algorithm: String): Key
 
-    fun deleteKey(alias: String)
+    fun deleteKey(alias: String, algorithm: String)
 
-    fun getAliases(): List<String>
+    fun hasKey(alias: String, algorithm: String): Boolean
 
 }

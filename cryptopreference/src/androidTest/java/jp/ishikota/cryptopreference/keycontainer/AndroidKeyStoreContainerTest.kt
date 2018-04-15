@@ -1,8 +1,9 @@
 package jp.ishikota.cryptopreference.keycontainer
 
 import android.support.test.runner.AndroidJUnit4
-import junit.framework.Assert
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertFalse
+import junit.framework.Assert.assertTrue
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -20,56 +21,70 @@ class AndroidKeyStoreContainerTest {
 
     @After
     fun tearUp() {
-        keyContainer.getAliases().forEach {
-            keyContainer.deleteKey(it)
-        }
+        keyContainer.deleteKey(ALIAS_1, AES)
+        keyContainer.deleteKey(ALIAS_1, RSA)
+        keyContainer.deleteKey(ALIAS_2, AES)
+        keyContainer.deleteKey(ALIAS_2, RSA)
     }
 
     @Test
-    fun testGetKeyAndGenerateNewKey() {
-        assertEquals(0, keyContainer.getAliases().size)
-        keyContainer.getKey(ALIAS_1)
-        assertEquals(1, keyContainer.getAliases().size)
-
+    fun testGenerateNewKey() {
+        assertFalse(keyContainer.hasKey(ALIAS_1, AES))
+        keyContainer.getOrGenerateNewKey(ALIAS_1, AES)
+        assertTrue(keyContainer.hasKey(ALIAS_1, AES))
     }
 
     @Test
-    fun testGetKeyAndFetchGeneratedKey() {
-        val alias1Generated = keyContainer.getKey(ALIAS_1)
-        assertEquals(1, keyContainer.getAliases().size)
-
-        val alias1Fetched = keyContainer.getKey(ALIAS_1)
-        assertEquals(alias1Generated, alias1Fetched)
-
-        val alias2Generated = keyContainer.getKey(ALIAS_2)
-        assertEquals(2, keyContainer.getAliases().size)
-
-        val alias2Fetched = keyContainer.getKey(ALIAS_2)
-        assertEquals(alias2Generated, alias2Fetched)
-        Assert.assertFalse(alias1Generated == alias2Fetched)
+    fun testGetSavedKey() {
+        val generated = keyContainer.getOrGenerateNewKey(ALIAS_1, AES)
+        val saved = keyContainer.getOrGenerateNewKey(ALIAS_1, AES)
+        assertEquals(generated, saved)
     }
 
     @Test
-    fun testDeleteKey() {
-        keyContainer.getKey(ALIAS_1)
-        assertEquals(1, keyContainer.getAliases().size)
+    fun testDeleteKeyWhenSignatureIsSame() {
+        keyContainer.getOrGenerateNewKey(ALIAS_1, AES)
+        assertTrue(keyContainer.hasKey(ALIAS_1, AES))
 
-        keyContainer.deleteKey(ALIAS_1)
-        assertEquals(0, keyContainer.getAliases().size)
+        keyContainer.deleteKey(ALIAS_1, AES)
+
+        assertFalse(keyContainer.hasKey(ALIAS_1, AES))
+    }
+
+    @Test
+    fun testDeleteKeyWhenSameAliasButDifferentAlgorithm() {
+        keyContainer.getOrGenerateNewKey(ALIAS_1, AES)
+        keyContainer.getOrGenerateNewKey(ALIAS_1, RSA)
+
+        keyContainer.deleteKey(ALIAS_1, RSA)
+
+        assertTrue(keyContainer.hasKey(ALIAS_1, AES))
+        assertFalse(keyContainer.hasKey(ALIAS_1, RSA))
+    }
+
+    @Test
+    fun testDeleteLeyWhenDifferentAliasButSameAlgorithm() {
+        keyContainer.getOrGenerateNewKey(ALIAS_1, AES)
+        keyContainer.getOrGenerateNewKey(ALIAS_2, AES)
+
+        keyContainer.deleteKey(ALIAS_1, AES)
+
+        assertFalse(keyContainer.hasKey(ALIAS_1, AES))
+        assertTrue(keyContainer.hasKey(ALIAS_2, AES))
     }
 
     @Test
     fun testDeleteKeyWithoutEntry() {
-        keyContainer.deleteKey(ALIAS_1)
-        assertEquals(0, keyContainer.getAliases().size)
+        keyContainer.deleteKey(ALIAS_1, AES)
+        assertFalse(keyContainer.hasKey(ALIAS_1, AES))
     }
 
     @Test
-    fun testGetAliases() {
-        keyContainer.getKey(ALIAS_2)
-        keyContainer.getKey(ALIAS_2)
-        keyContainer.getKey(ALIAS_1)
-        assertEquals(listOf(ALIAS_2, ALIAS_1), keyContainer.getAliases())
+    fun testHasKey() {
+        keyContainer.getOrGenerateNewKey(ALIAS_1, AES)
+        assertTrue(keyContainer.hasKey(ALIAS_1, AES))
+        assertFalse(keyContainer.hasKey(ALIAS_1, RSA))
+        assertFalse(keyContainer.hasKey(ALIAS_2, AES))
     }
 
     companion object {
@@ -77,6 +92,10 @@ class AndroidKeyStoreContainerTest {
         private const val ALIAS_1 = "alias_1"
 
         private const val ALIAS_2 = "alias_2"
+        
+        private const val AES = "AES"
+        
+        private const val RSA = "RSA"
 
     }
 

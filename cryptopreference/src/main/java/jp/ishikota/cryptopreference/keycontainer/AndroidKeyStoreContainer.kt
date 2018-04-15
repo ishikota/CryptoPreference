@@ -19,13 +19,14 @@ class AndroidKeyStoreContainer : SecretKeyContainer {
         }
     }
 
-    override fun getKey(alias: String): SecretKey {
-        if (keystore.containsAlias(alias)) {
-            return (keystore.getEntry(alias, null) as KeyStore.SecretKeyEntry).secretKey
+    override fun getOrGenerateNewKey(alias: String, algorithm: String): SecretKey {
+        val keyAlias = genKeyAlias(alias, algorithm)
+        if (keystore.containsAlias(keyAlias)) {
+            return (keystore.getEntry(keyAlias, null) as KeyStore.SecretKeyEntry).secretKey
         } else {
             val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
             keyGenerator.init(KeyGenParameterSpec.Builder(
-                alias,
+                keyAlias,
                 KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                 .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
@@ -34,11 +35,14 @@ class AndroidKeyStoreContainer : SecretKeyContainer {
         }
     }
 
-    override fun deleteKey(alias: String) {
-        keystore.deleteEntry(alias)
+    override fun deleteKey(alias: String, algorithm: String) {
+        keystore.deleteEntry(genKeyAlias(alias, algorithm))
     }
 
-    override fun getAliases(): List<String> = keystore.aliases().toList()
+    override fun hasKey(alias: String, algorithm: String): Boolean =
+        keystore.containsAlias(genKeyAlias(alias, algorithm))
+
+    private fun genKeyAlias(alias: String, algorithm: String) = "${alias}_$algorithm"
 
     companion object {
 
