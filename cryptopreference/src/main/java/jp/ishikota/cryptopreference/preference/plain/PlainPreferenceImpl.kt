@@ -3,10 +3,12 @@ package jp.ishikota.cryptopreference.preference.plain
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import jp.ishikota.cryptopreference.preference.encrypted.encoder.ByteArrayEncoder
 
 internal class PlainPreferenceImpl(
     private val context: Context,
     private val preferenceName: String,
+    private val byteArrayEncoder: ByteArrayEncoder,
     private val debugMode: Boolean
 ): PlainPreference {
 
@@ -19,18 +21,36 @@ internal class PlainPreferenceImpl(
 
     override fun getString(key: String): String = pref.getString(key, DEFAULT_STRING)
 
-    override fun delete(key: String) {
+    override fun deleteString(key: String) {
         pref.edit().remove(key).apply()
         if (debugMode) {
             Log.d(TAG, "deleted string which saved with key [ $key ]")
         }
     }
 
-    override fun hasKey(key: String): Boolean = pref.contains(key)
+    override fun hasStringKey(key: String): Boolean = pref.contains(key)
+
+    override fun saveIv(keyAlias: String, iv: ByteArray) {
+        val encoded = byteArrayEncoder.encode(iv)
+        saveString(genIvKey(keyAlias), encoded)
+    }
+
+    override fun getIv(keyAlias: String): ByteArray {
+        val encoded = getString(genIvKey(keyAlias))
+        return byteArrayEncoder.decode(encoded)
+    }
+
+    override fun deleteIv(keyAlias: String) {
+        deleteString(genIvKey(keyAlias))
+    }
+
+    override fun hasIvKey(keyAlias: String) = pref.contains(genIvKey(keyAlias))
 
     override fun clear() {
-        pref.all.keys.forEach { delete(it) }
+        pref.all.keys.forEach { deleteString(it) }
     }
+
+    private fun genIvKey(keyAlias: String) = "${IV_KEY_PREFIX}_$keyAlias"
 
     private val pref: SharedPreferences
         get() = context.getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
@@ -40,6 +60,8 @@ internal class PlainPreferenceImpl(
         private const val TAG = "CryptoPreference"
 
         private const val DEFAULT_STRING = ""
+
+        private const val IV_KEY_PREFIX = "IV_"
 
     }
 }

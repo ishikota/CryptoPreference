@@ -6,9 +6,17 @@ internal interface PlainPreference {
 
     fun getString(key: String): String
 
-    fun delete(key: String)
+    fun deleteString(key: String)
 
-    fun hasKey(key: String): Boolean
+    fun hasStringKey(key: String): Boolean
+
+    fun saveIv(keyAlias: String, iv: ByteArray)
+
+    fun getIv(keyAlias: String): ByteArray
+
+    fun deleteIv(keyAlias: String)
+
+    fun hasIvKey(keyAlias: String): Boolean
 
     fun clear()
 
