@@ -62,7 +62,7 @@ class EncryptedPreferenceTest {
     }
 
     @Test
-    fun testDeletePrivateStringWithAndroidKeystoreContainerBackend() {
+    fun testDeletePrivateString() {
         val pref = InstrumentationRegistry.getTargetContext().getSharedPreferences("CryptoPreference", Context.MODE_PRIVATE)
         val textToSave = "This is very important string."
         val encryptedPref = genAndroidKeystoreBackendPref()
