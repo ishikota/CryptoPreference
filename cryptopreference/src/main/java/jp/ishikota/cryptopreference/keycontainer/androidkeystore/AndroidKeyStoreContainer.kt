@@ -1,17 +1,18 @@
-package jp.ishikota.cryptopreference.keycontainer
+package jp.ishikota.cryptopreference.keycontainer.androidkeystore
 
 import android.annotation.TargetApi
 import android.os.Build
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyProperties
+import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainer
+import jp.ishikota.cryptopreference.keycontainer.SecretKeyFactory
 import java.security.KeyStore
-import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
 @TargetApi(Build.VERSION_CODES.M)
-class AndroidKeyStoreContainer : SecretKeyContainer {
+internal class AndroidKeyStoreContainer : SecretKeyContainer {
 
     private val keystore: KeyStore
+
+    private val keyFactories = listOf(AESSecretKeyFactory())
 
     init {
         keystore = KeyStore.getInstance(ANDROID_KEY_STORE).apply {
@@ -26,17 +27,12 @@ class AndroidKeyStoreContainer : SecretKeyContainer {
         padding: SecretKeyContainer.Padding
     ): SecretKey {
         val keyAlias = genKeyAlias(alias, algorithm, blockMode, padding)
-        if (keystore.containsAlias(keyAlias)) {
-            return (keystore.getEntry(keyAlias, null) as KeyStore.SecretKeyEntry).secretKey
+        return if (keystore.containsAlias(keyAlias)) {
+            val entry = (keystore.getEntry(keyAlias, null) as KeyStore.SecretKeyEntry)
+            entry.secretKey
         } else {
-            val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
-            keyGenerator.init(KeyGenParameterSpec.Builder(
-                keyAlias,
-                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-                .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                .build())
-            return keyGenerator.generateKey()
+            val keyFactory = getKeyFactory(algorithm, blockMode, padding)
+            keyFactory.create(keyAlias, algorithm, blockMode, padding)
         }
     }
 
@@ -56,6 +52,21 @@ class AndroidKeyStoreContainer : SecretKeyContainer {
         padding: SecretKeyContainer.Padding
     ): Boolean =
         keystore.containsAlias(genKeyAlias(alias, algorithm, blockMode, padding))
+
+    private fun getKeyFactory(
+        algorithm: SecretKeyContainer.Algorithm,
+        blockMode: SecretKeyContainer.BlockMode,
+        padding: SecretKeyContainer.Padding): SecretKeyFactory {
+        val supportedKeyFactories = keyFactories.filter { it.isSupported(algorithm, blockMode, padding) }
+        return when {
+            supportedKeyFactories.isEmpty() ->
+                throw SecretKeyContainer.TransformationNotSupportedException(algorithm, blockMode, padding)
+            supportedKeyFactories.size > 1 ->
+                throw SecretKeyContainer.TooManySecretKeyFactoryException(supportedKeyFactories, algorithm, blockMode, padding)
+            else ->
+                supportedKeyFactories.first()
+        }
+    }
 
     private fun genKeyAlias(
         alias: String,

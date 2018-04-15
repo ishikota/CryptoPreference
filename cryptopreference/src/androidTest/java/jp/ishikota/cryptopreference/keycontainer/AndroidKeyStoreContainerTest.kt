@@ -1,6 +1,7 @@
 package jp.ishikota.cryptopreference.keycontainer
 
 import android.support.test.runner.AndroidJUnit4
+import jp.ishikota.cryptopreference.keycontainer.androidkeystore.AndroidKeyStoreContainer
 import junit.framework.Assert.assertFalse
 import junit.framework.Assert.assertTrue
 import org.junit.After

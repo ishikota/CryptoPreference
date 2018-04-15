@@ -2,7 +2,7 @@ package jp.ishikota.cryptopreference.keycontainer
 
 import java.security.Key
 
-interface SecretKeyContainer {
+internal interface SecretKeyContainer {
 
     fun getOrGenerateNewKey(
         alias: String,
@@ -36,5 +36,17 @@ interface SecretKeyContainer {
     enum class Padding(val label: String) {
         PKCS7("PKCS7Padding")
     }
+
+    class TransformationNotSupportedException(
+        algorithm: Algorithm, blockMode: BlockMode, padding: Padding
+    ): RuntimeException(
+        "The transformation ${algorithm.label}/${blockMode.label}/${padding.label} is not supported."
+    )
+
+    class TooManySecretKeyFactoryException(
+        factories: List<SecretKeyFactory>, algorithm: Algorithm, blockMode: BlockMode, padding: Padding
+    ): RuntimeException(
+        "More than one SecretKeyFactory found for a transformation. factories=$factories, transformation=${algorithm.label}/${blockMode.label}/${padding.label}"
+    )
 
 }
