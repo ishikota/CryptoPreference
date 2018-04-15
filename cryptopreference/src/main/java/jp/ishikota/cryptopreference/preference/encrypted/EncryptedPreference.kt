@@ -6,4 +6,6 @@ interface EncryptedPreference {
 
     fun getPrivateString(key: String): String
 
+    fun deletePrivateString(key: String)
+
 }

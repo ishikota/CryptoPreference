@@ -1,5 +1,6 @@
 package jp.ishikota.cryptopreference.preference.encrypted
 
+import android.content.Context
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainer
@@ -8,6 +9,8 @@ import jp.ishikota.cryptopreference.keycontainer.compat.SecretKeyContainerCompat
 import jp.ishikota.cryptopreference.preference.plain.PlainPreference
 import jp.ishikota.cryptopreference.preference.plain.PlainPreferenceFactory
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertFalse
+import junit.framework.Assert.assertTrue
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -56,6 +59,18 @@ class EncryptedPreferenceTest {
         encryptedPref.savePrivateString(KEY_PREF, textToSave)
         val fetched = encryptedPref.getPrivateString(KEY_PREF)
         assertEquals(textToSave, fetched)
+    }
+
+    @Test
+    fun testDeletePrivateStringWithAndroidKeystoreContainerBackend() {
+        val pref = InstrumentationRegistry.getTargetContext().getSharedPreferences("CryptoPreference", Context.MODE_PRIVATE)
+        val textToSave = "This is very important string."
+        val encryptedPref = genAndroidKeystoreBackendPref()
+
+        encryptedPref.savePrivateString(KEY_PREF, textToSave)
+        assertFalse(pref.all.isEmpty())
+        encryptedPref.deletePrivateString(KEY_PREF)
+        assertTrue(pref.all.isEmpty())
     }
 
     private fun genAndroidKeystoreBackendPref() = encryptedPreferenceFactory.create(

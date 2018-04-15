@@ -22,4 +22,10 @@ internal class EncryptedPreferenceImpl(
         val plainByteArray = criptor.decrypt(key, encrypted)
         return String(plainByteArray)
     }
+
+    override fun deletePrivateString(key: String) {
+        plainPreference.deleteString(key)
+        plainPreference.deleteIv(key)
+    }
+
 }
