@@ -1,29 +1,19 @@
 package jp.ishikota.cryptopreference.sample
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyProperties
 import android.support.v7.app.AppCompatActivity
 import android.util.Base64
 import android.util.Log
 import android.widget.Toast
-import jp.ishikota.cryptopreference.cipher.CipherLogic
-import jp.ishikota.cryptopreference.cipher.CipherLogicException
-import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainer
 import kotlinx.android.synthetic.main.activity_main.*
-import java.security.KeyStore
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.UUID
 import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
 import javax.crypto.IllegalBlockSizeException
-import javax.crypto.KeyGenerator
-import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
@@ -35,7 +25,6 @@ class MainActivity : AppCompatActivity() {
 
         val key = "abcdefghijklmnop"
         val encryptedPreference1 = EncryptedPreference1(key, PlainPreference(this, debugMode = true))
-        val encryptedPreference2 = EncryptedPreference2(PlainPreference(this, debugMode = true))
 
         button_save.setOnClickListener {
             val k = edit_key.text.toString()
@@ -142,123 +131,6 @@ class EncryptedPreference1(
 
 }
 
-class EncryptedPreference2(private val plainPreference: PlainPreference) {
-
-    private val cipherLogic = CipherLogicImpl(plainPreference, AndroidKeyStoreContainer())
-
-    fun savePrivateString(key: String, value: String) {
-        val encrypted = cipherLogic.encrypt(key, value)
-        plainPreference.saveString(obfuscate(key), Base64.encodeToString(encrypted, Base64.DEFAULT))
-    }
-
-    fun getPrivateString(key: String): String {
-        val encrypted = plainPreference.getString(obfuscate(key))
-        return cipherLogic.decrypt(key, Base64.decode(encrypted, Base64.DEFAULT))
-    }
-
-    private fun obfuscate(key: String) = HashUtils.generateSha256(key)
-}
-
-internal class CipherLogicImpl(
-    private val plainPreference: PlainPreference,
-    private val keyContainer: SecretKeyContainer
-): CipherLogic {
-
-    override fun encrypt(alias: String, plain: String): ByteArray {
-        val secretKey = keyContainer.getKey(alias)
-        val cipher = Cipher.getInstance(TRANSFORMATION).apply {
-            init(Cipher.ENCRYPT_MODE, secretKey)
-            saveIv(alias, iv)
-        }
-        return cipher.doFinal(plain.toByteArray())
-    }
-
-    override fun decrypt(alias: String, encrypted: ByteArray): String {
-        checkDecryptionPrecondition(alias)
-
-        val secretKey = keyContainer.getKey(alias)
-        val iv = getIv(alias)
-        val cipher = Cipher.getInstance(TRANSFORMATION).apply {
-            init(Cipher.DECRYPT_MODE, secretKey, IvParameterSpec(iv))
-        }
-        return String(cipher.doFinal(encrypted))
-    }
-
-    private fun saveIv(alias: String, iv: ByteArray) = plainPreference.saveString(getIVKey(alias), encodeToBase64(iv))
-
-    private fun getIv(alias: String) = decodeFromBase64(plainPreference.getString(getIVKey(alias)))
-
-    private fun encodeToBase64(byteArray: ByteArray) = Base64.encodeToString(byteArray, Base64.DEFAULT)
-
-    private fun decodeFromBase64(encoded: String) = Base64.decode(encoded, Base64.DEFAULT)
-
-    private fun getIVKey(alias: String) = "${PREF_KEY_IV_PREFIX}_$alias"
-
-    private fun checkDecryptionPrecondition(alias: String) {
-        val keyNotSaved = !keyContainer.getAliases().contains(alias)
-        val ivNotFound = !plainPreference.hasKey(getIVKey(alias))
-        if (keyNotSaved) {
-            throw CipherLogicException("SecretKey not found from keyContainer with alias [ $alias ]")
-        } else if (ivNotFound) {
-            throw CipherLogicException("IV not found from preference with alias [ $alias ]")
-        }
-    }
-
-    companion object {
-
-        private const val TAG = "CipherLogicImpl"
-
-        private const val PREF_KEY_IV_PREFIX = "pref_key_iv_prefix"
-
-        private const val ALGORITHM = "AES"
-
-        private const val MODE = "CBC"
-
-        private const val PADDING = "PKCS7Padding"
-
-        private const val TRANSFORMATION = "$ALGORITHM/$MODE/$PADDING"
-
-    }
-}
-
-@TargetApi(Build.VERSION_CODES.M)
-class AndroidKeyStoreContainer : SecretKeyContainer {
-
-    private val keystore: KeyStore
-
-    init {
-        keystore = KeyStore.getInstance(ANDROID_KEY_STORE).apply {
-            load(null)
-        }
-    }
-
-    override fun getKey(alias: String): SecretKey {
-        if (keystore.containsAlias(alias)) {
-            return (keystore.getEntry(alias, null) as KeyStore.SecretKeyEntry).secretKey
-        } else {
-            val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
-            keyGenerator.init(KeyGenParameterSpec.Builder(
-                alias,
-                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-                .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                .build())
-            return keyGenerator.generateKey()
-        }
-    }
-
-    override fun deleteKey(alias: String) {
-        keystore.deleteEntry(alias)
-    }
-
-    override fun getAliases(): List<String> = keystore.aliases().toList()
-
-    companion object {
-
-        private const val ANDROID_KEY_STORE = "AndroidKeyStore"
-
-    }
-}
 
 class PlainPreference(private val context: Context, private val debugMode: Boolean = false) {
 
