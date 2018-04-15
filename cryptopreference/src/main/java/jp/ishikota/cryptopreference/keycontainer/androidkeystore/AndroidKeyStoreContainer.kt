@@ -2,6 +2,7 @@ package jp.ishikota.cryptopreference.keycontainer.androidkeystore
 
 import android.annotation.TargetApi
 import android.os.Build
+import android.support.annotation.VisibleForTesting
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainer
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyFactory
 import java.security.KeyStore
@@ -74,6 +75,12 @@ internal class AndroidKeyStoreContainer : SecretKeyContainer {
         blockMode: SecretKeyContainer.BlockMode,
         padding: SecretKeyContainer.Padding
     ) = "${alias}_${algorithm.label}_${blockMode.label}_${padding.label}"
+
+
+    @VisibleForTesting
+    fun clearKeys() {
+        keystore.aliases().toList().forEach { keystore.deleteEntry(it) }
+    }
 
     companion object {
 
