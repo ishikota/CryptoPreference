@@ -1,8 +1,8 @@
 package jp.ishikota.cryptopreference.preference.plain
 
 import android.content.Context
-import jp.ishikota.cryptopreference.preference.encrypted.encoder.Base64Encoder
-import jp.ishikota.cryptopreference.preference.encrypted.encoder.ByteArrayEncoder
+import jp.ishikota.cryptopreference.preference.bytearrayencoder.Base64Encoder
+import jp.ishikota.cryptopreference.preference.bytearrayencoder.ByteArrayEncoder
 
 internal class PlainPreferenceFactory(
     private val byteArrayEncoder: ByteArrayEncoder = Base64Encoder()

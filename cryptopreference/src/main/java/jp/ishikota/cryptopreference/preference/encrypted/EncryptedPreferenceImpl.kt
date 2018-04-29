@@ -1,7 +1,7 @@
 package jp.ishikota.cryptopreference.preference.encrypted
 
 import jp.ishikota.cryptopreference.cryptor.Cryptor
-import jp.ishikota.cryptopreference.preference.encrypted.encoder.ByteArrayEncoder
+import jp.ishikota.cryptopreference.preference.bytearrayencoder.ByteArrayEncoder
 import jp.ishikota.cryptopreference.preference.plain.PlainPreference
 
 internal class EncryptedPreferenceImpl(
