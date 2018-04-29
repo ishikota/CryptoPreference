@@ -34,7 +34,7 @@ class EncryptedPreferenceTest {
     @Before
     fun setup() {
         val appContext = InstrumentationRegistry.getTargetContext()
-        plainPreference = PlainPreferenceFactory().create(appContext, debugMode = true)
+        plainPreference = PlainPreferenceFactory("CryptoPreference").create(appContext, debugMode = true)
     }
 
     @After
