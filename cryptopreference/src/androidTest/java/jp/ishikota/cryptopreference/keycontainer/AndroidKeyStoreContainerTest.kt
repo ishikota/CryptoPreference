@@ -1,6 +1,9 @@
 package jp.ishikota.cryptopreference.keycontainer
 
 import android.support.test.runner.AndroidJUnit4
+import jp.ishikota.cryptopreference.Algorithm
+import jp.ishikota.cryptopreference.BlockMode
+import jp.ishikota.cryptopreference.Padding
 import jp.ishikota.cryptopreference.keycontainer.androidkeystore.AndroidKeyStoreContainer
 import junit.framework.Assert.assertFalse
 import junit.framework.Assert.assertTrue
@@ -14,11 +17,11 @@ class AndroidKeyStoreContainerTest {
 
     private lateinit var keyContainer: AndroidKeyStoreContainer
 
-    private val AES = SecretKeyContainer.Algorithm.AES
+    private val AES = Algorithm.AES
 
-    private val CBC = SecretKeyContainer.BlockMode.CBC
+    private val CBC = BlockMode.CBC
 
-    private val PKCS7 = SecretKeyContainer.Padding.PKCS7
+    private val PKCS7 = Padding.PKCS7
 
     @Before
     fun setup() {

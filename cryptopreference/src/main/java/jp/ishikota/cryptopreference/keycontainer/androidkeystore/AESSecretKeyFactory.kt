@@ -4,7 +4,9 @@ import android.annotation.TargetApi
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainer
+import jp.ishikota.cryptopreference.Algorithm
+import jp.ishikota.cryptopreference.BlockMode
+import jp.ishikota.cryptopreference.Padding
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyFactory
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
@@ -13,18 +15,18 @@ import javax.crypto.SecretKey
 internal class AESSecretKeyFactory: SecretKeyFactory {
 
     override fun isSupported(
-        algorithm: SecretKeyContainer.Algorithm,
-        blockMode: SecretKeyContainer.BlockMode,
-        padding: SecretKeyContainer.Padding
-    ) = algorithm == SecretKeyContainer.Algorithm.AES &&
-        blockMode == SecretKeyContainer.BlockMode.CBC &&
-        padding == SecretKeyContainer.Padding.PKCS7
+        algorithm: Algorithm,
+        blockMode: BlockMode,
+        padding: Padding
+    ) = algorithm == Algorithm.AES &&
+        blockMode == BlockMode.CBC &&
+        padding == Padding.PKCS7
 
     override fun create(
         alias: String,
-        algorithm: SecretKeyContainer.Algorithm,
-        blockMode: SecretKeyContainer.BlockMode,
-        padding: SecretKeyContainer.Padding
+        algorithm: Algorithm,
+        blockMode: BlockMode,
+        padding: Padding
     ): SecretKey {
         val keyGenerator = KeyGenerator.getInstance(ALGORITHM, ANDROID_KEY_STORE)
         keyGenerator.init(KeyGenParameterSpec.Builder(alias, KEY_PURPOSE)
@@ -34,12 +36,12 @@ internal class AESSecretKeyFactory: SecretKeyFactory {
         return keyGenerator.generateKey()
     }
 
-    private fun blockModeToStr(blockMode: SecretKeyContainer.BlockMode) = when(blockMode) {
-        SecretKeyContainer.BlockMode.CBC -> KeyProperties.BLOCK_MODE_CBC
+    private fun blockModeToStr(blockMode: BlockMode) = when(blockMode) {
+        BlockMode.CBC -> KeyProperties.BLOCK_MODE_CBC
     }
 
-    private fun paddingToStr(padding: SecretKeyContainer.Padding) = when(padding) {
-        SecretKeyContainer.Padding.PKCS7 -> KeyProperties.ENCRYPTION_PADDING_PKCS7
+    private fun paddingToStr(padding: Padding) = when(padding) {
+        Padding.PKCS7 -> KeyProperties.ENCRYPTION_PADDING_PKCS7
     }
 
     companion object {

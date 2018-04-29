@@ -1,20 +1,23 @@
 package jp.ishikota.cryptopreference.keycontainer
 
+import jp.ishikota.cryptopreference.Algorithm
+import jp.ishikota.cryptopreference.BlockMode
+import jp.ishikota.cryptopreference.Padding
 import javax.crypto.SecretKey
 
 internal interface SecretKeyFactory {
 
     fun isSupported(
-        algorithm: SecretKeyContainer.Algorithm,
-        blockMode: SecretKeyContainer.BlockMode,
-        padding: SecretKeyContainer.Padding
+        algorithm: Algorithm,
+        blockMode: BlockMode,
+        padding: Padding
     ): Boolean
 
     fun create(
         alias: String,
-        algorithm: SecretKeyContainer.Algorithm,
-        blockMode: SecretKeyContainer.BlockMode,
-        padding: SecretKeyContainer.Padding
+        algorithm: Algorithm,
+        blockMode: BlockMode,
+        padding: Padding
     ): SecretKey
 
 }

@@ -2,6 +2,9 @@ package jp.ishikota.cryptopreference.cryptor
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
+import jp.ishikota.cryptopreference.Algorithm
+import jp.ishikota.cryptopreference.BlockMode
+import jp.ishikota.cryptopreference.Padding
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainer
 import jp.ishikota.cryptopreference.keycontainer.androidkeystore.AndroidKeyStoreContainer
 import jp.ishikota.cryptopreference.keycontainer.compat.SecretKeyContainerCompat
@@ -20,11 +23,11 @@ class CipherCryptorTest {
 
     private val androidKeystoreContainer = AndroidKeyStoreContainer()
 
-    private val AES = SecretKeyContainer.Algorithm.AES
+    private val AES = Algorithm.AES
 
-    private val CBC = SecretKeyContainer.BlockMode.CBC
+    private val CBC = BlockMode.CBC
 
-    private val PKCS7 = SecretKeyContainer.Padding.PKCS7
+    private val PKCS7 = Padding.PKCS7
 
     @Before
     fun setup() {

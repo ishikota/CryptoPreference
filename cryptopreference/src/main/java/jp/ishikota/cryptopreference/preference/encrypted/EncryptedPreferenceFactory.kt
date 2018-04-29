@@ -1,5 +1,8 @@
 package jp.ishikota.cryptopreference.preference.encrypted
 
+import jp.ishikota.cryptopreference.Algorithm
+import jp.ishikota.cryptopreference.BlockMode
+import jp.ishikota.cryptopreference.Padding
 import jp.ishikota.cryptopreference.cryptor.CipherCryptor
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainer
 import jp.ishikota.cryptopreference.preference.bytearrayencoder.Base64Encoder
@@ -11,9 +14,9 @@ internal class EncryptedPreferenceFactory {
     fun create(
         secretKeyContainer: SecretKeyContainer,
         plainPreference: PlainPreference,
-        algorithm: SecretKeyContainer.Algorithm,
-        blockMode: SecretKeyContainer.BlockMode,
-        padding: SecretKeyContainer.Padding,
+        algorithm: Algorithm,
+        blockMode: BlockMode,
+        padding: Padding,
         byteArrayEncoder: ByteArrayEncoder = Base64Encoder()
     ): EncryptedPreference {
         val cryptor = initializeCryptor(secretKeyContainer, plainPreference, algorithm, blockMode, padding)
@@ -23,9 +26,9 @@ internal class EncryptedPreferenceFactory {
     private fun initializeCryptor(
         secretKeyContainer: SecretKeyContainer,
         plainPreference: PlainPreference,
-        algorithm: SecretKeyContainer.Algorithm,
-        blockMode: SecretKeyContainer.BlockMode,
-        padding: SecretKeyContainer.Padding
+        algorithm: Algorithm,
+        blockMode: BlockMode,
+        padding: Padding
     ) = CipherCryptor(
         secretKeyContainer,
         plainPreference,

@@ -1,5 +1,8 @@
 package jp.ishikota.cryptopreference.cryptor
 
+import jp.ishikota.cryptopreference.Algorithm
+import jp.ishikota.cryptopreference.BlockMode
+import jp.ishikota.cryptopreference.Padding
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainer
 import jp.ishikota.cryptopreference.preference.plain.PlainPreference
 import javax.crypto.Cipher
@@ -8,9 +11,9 @@ import javax.crypto.spec.IvParameterSpec
 internal class CipherCryptor(
     private val secretKeyContainer: SecretKeyContainer,
     private val plainPreference: PlainPreference,
-    private val algorithm: SecretKeyContainer.Algorithm,
-    private val blockMode: SecretKeyContainer.BlockMode,
-    private val padding: SecretKeyContainer.Padding
+    private val algorithm: Algorithm,
+    private val blockMode: BlockMode,
+    private val padding: Padding
 ): Cryptor {
 
     override fun encrypt(
@@ -40,9 +43,9 @@ internal class CipherCryptor(
     }
 
     private fun genTransformation(
-        algorithm: SecretKeyContainer.Algorithm,
-        blockMode: SecretKeyContainer.BlockMode,
-        padding: SecretKeyContainer.Padding
+        algorithm: Algorithm,
+        blockMode: BlockMode,
+        padding: Padding
     ) = "${algorithm.label}/${blockMode.label}/${padding.label}"
 
 }

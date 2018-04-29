@@ -3,6 +3,9 @@ package jp.ishikota.cryptopreference.keycontainer.androidkeystore
 import android.annotation.TargetApi
 import android.os.Build
 import android.support.annotation.VisibleForTesting
+import jp.ishikota.cryptopreference.Algorithm
+import jp.ishikota.cryptopreference.BlockMode
+import jp.ishikota.cryptopreference.Padding
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainer
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyFactory
 import java.security.KeyStore
@@ -23,9 +26,9 @@ internal class AndroidKeyStoreContainer : SecretKeyContainer {
 
     override fun getOrGenerateNewKey(
         alias: String,
-        algorithm: SecretKeyContainer.Algorithm,
-        blockMode: SecretKeyContainer.BlockMode,
-        padding: SecretKeyContainer.Padding
+        algorithm: Algorithm,
+        blockMode: BlockMode,
+        padding: Padding
     ): SecretKey {
         val keyAlias = genKeyAlias(alias, algorithm, blockMode, padding)
         return if (keystore.containsAlias(keyAlias)) {
@@ -39,25 +42,25 @@ internal class AndroidKeyStoreContainer : SecretKeyContainer {
 
     override fun deleteKey(
         alias: String,
-        algorithm: SecretKeyContainer.Algorithm,
-        blockMode: SecretKeyContainer.BlockMode,
-        padding: SecretKeyContainer.Padding
+        algorithm: Algorithm,
+        blockMode: BlockMode,
+        padding: Padding
     ) {
         keystore.deleteEntry(genKeyAlias(alias, algorithm, blockMode, padding))
     }
 
     override fun hasKey(
         alias: String,
-        algorithm: SecretKeyContainer.Algorithm,
-        blockMode: SecretKeyContainer.BlockMode,
-        padding: SecretKeyContainer.Padding
+        algorithm: Algorithm,
+        blockMode: BlockMode,
+        padding: Padding
     ): Boolean =
         keystore.containsAlias(genKeyAlias(alias, algorithm, blockMode, padding))
 
     private fun getKeyFactory(
-        algorithm: SecretKeyContainer.Algorithm,
-        blockMode: SecretKeyContainer.BlockMode,
-        padding: SecretKeyContainer.Padding): SecretKeyFactory {
+        algorithm: Algorithm,
+        blockMode: BlockMode,
+        padding: Padding): SecretKeyFactory {
         val supportedKeyFactories = keyFactories.filter { it.isSupported(algorithm, blockMode, padding) }
         return when {
             supportedKeyFactories.isEmpty() ->
@@ -71,9 +74,9 @@ internal class AndroidKeyStoreContainer : SecretKeyContainer {
 
     private fun genKeyAlias(
         alias: String,
-        algorithm: SecretKeyContainer.Algorithm,
-        blockMode: SecretKeyContainer.BlockMode,
-        padding: SecretKeyContainer.Padding
+        algorithm: Algorithm,
+        blockMode: BlockMode,
+        padding: Padding
     ) = "${alias}_${algorithm.label}_${blockMode.label}_${padding.label}"
 
 

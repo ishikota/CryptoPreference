@@ -1,6 +1,8 @@
 package jp.ishikota.cryptopreference.keycontainer.compat
 
-import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainer
+import jp.ishikota.cryptopreference.Algorithm
+import jp.ishikota.cryptopreference.BlockMode
+import jp.ishikota.cryptopreference.Padding
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyFactory
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
@@ -8,19 +10,19 @@ import javax.crypto.spec.SecretKeySpec
 internal class AESSecretKeyFactory(private val secret: ByteArray): SecretKeyFactory {
 
     override fun isSupported(
-        algorithm: SecretKeyContainer.Algorithm,
-        blockMode: SecretKeyContainer.BlockMode,
-        padding: SecretKeyContainer.Padding
-    ) = algorithm == SecretKeyContainer.Algorithm.AES &&
-        blockMode == SecretKeyContainer.BlockMode.CBC &&
-        padding == SecretKeyContainer.Padding.PKCS7
+        algorithm: Algorithm,
+        blockMode: BlockMode,
+        padding: Padding
+    ) = algorithm == Algorithm.AES &&
+        blockMode == BlockMode.CBC &&
+        padding == Padding.PKCS7
 
 
     override fun create(
         alias: String,
-        algorithm: SecretKeyContainer.Algorithm,
-        blockMode: SecretKeyContainer.BlockMode,
-        padding: SecretKeyContainer.Padding
+        algorithm: Algorithm,
+        blockMode: BlockMode,
+        padding: Padding
     ): SecretKey = SecretKeySpec(secret, ALGORITHM)
 
     companion object {

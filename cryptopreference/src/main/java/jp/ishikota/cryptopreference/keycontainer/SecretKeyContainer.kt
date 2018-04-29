@@ -1,5 +1,8 @@
 package jp.ishikota.cryptopreference.keycontainer
 
+import jp.ishikota.cryptopreference.Algorithm
+import jp.ishikota.cryptopreference.BlockMode
+import jp.ishikota.cryptopreference.Padding
 import java.security.Key
 
 internal interface SecretKeyContainer {
@@ -24,18 +27,6 @@ internal interface SecretKeyContainer {
         blockMode: BlockMode,
         padding: Padding
     ): Boolean
-
-    enum class Algorithm(val label: String) {
-        AES("AES")
-    }
-
-    enum class BlockMode(val label: String) {
-        CBC("CBC")
-    }
-
-    enum class Padding(val label: String) {
-        PKCS7("PKCS7Padding")
-    }
 
     class TransformationNotSupportedException(
         algorithm: Algorithm, blockMode: BlockMode, padding: Padding
