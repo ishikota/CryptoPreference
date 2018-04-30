@@ -40,6 +40,20 @@ class ApiTest {
         assertEquals("FUGA", encryptedPref.getPrivateString("HOGE"))
     }
 
+    @Test
+    fun decryptWithoutEntry() {
+        val context = InstrumentationRegistry.getTargetContext()
+
+        CryptoPreference.Initializer.also {
+            it.preferenceName = preferenceName
+            it.secretKeyForCompat = "1234567890123456".toByteArray()
+        }
+
+        val encryptedPref = CryptoPreference.create(context, Algorithm.AES, BlockMode.CBC, Padding.PKCS7)
+        val value = encryptedPref.getPrivateString("HOGE")
+        assertEquals(value, "")
+    }
+
     private fun cleanupPreference() {
         val context = InstrumentationRegistry.getTargetContext()
         val pref = context.getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
