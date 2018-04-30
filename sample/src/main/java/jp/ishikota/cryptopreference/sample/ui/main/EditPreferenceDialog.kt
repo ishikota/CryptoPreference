@@ -30,21 +30,13 @@ class EditPreferenceDialog: DialogFragment() {
             val key = editKey.text.toString()
             val value = editValue.text.toString()
 
-            val errorMsg = genErrorMessage(key, value)
-            if (errorMsg == null) {
+            if (key.isEmpty()) {
+                Toast.makeText(context, R.string.dialog_edit_pref_error_empty_key, Toast.LENGTH_SHORT).show()
+            } else {
                 (activity as? Listener)?.onNewPreferenceEntryReceived(key, value)
                 dismiss()
-            } else {
-                Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    private fun genErrorMessage(key: String, value: String): Int? = when {
-        key.isEmpty() && value.isEmpty() -> R.string.dialog_edit_pref_error_empty_key_value
-        key.isEmpty() -> R.string.dialog_edit_pref_error_empty_key
-        value.isEmpty() -> R.string.dialog_edit_pref_error_empty_value
-        else -> null
     }
 
 }
