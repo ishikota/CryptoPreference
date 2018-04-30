@@ -13,6 +13,11 @@ class ApiTest {
     @After
     fun tearDown() {
         cleanupPreference()
+        CryptoPreference.Initializer.apply {
+            preferenceName = null
+            secretKeyForCompat = null
+            debugMode = false
+        }
     }
 
     @Test(expected = InitializationException::class)
