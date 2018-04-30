@@ -1,9 +1,11 @@
 package jp.ishikota.cryptopreference.preference.plain
 
+import android.content.Context
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 import junit.framework.Assert
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertFalse
 import junit.framework.Assert.assertTrue
 import org.junit.After
 import org.junit.Before
@@ -73,6 +75,17 @@ class PlainPreferenceTest {
         Assert.assertFalse(preference.hasIvKey(KEY_IV))
         preference.saveIv(KEY_IV, iv)
         assertTrue(preference.hasIvKey(KEY_IV))
+    }
+
+    @Test
+    fun testKeyObfuscation() {
+        preference.saveString(KEY_STRING, "hoge")
+        preference.saveIv(KEY_IV, "0123456789123456".toByteArray())
+
+        val rawPreference = InstrumentationRegistry.getTargetContext()
+            .getSharedPreferences("CryptoPreference", Context.MODE_PRIVATE)
+        assertFalse(rawPreference.contains(KEY_STRING))
+        assertFalse(rawPreference.contains(KEY_IV))
     }
 
     @Test

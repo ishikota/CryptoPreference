@@ -66,3 +66,9 @@ enum class BlockMode(val label: String) {
 enum class Padding(val label: String) {
     PKCS7("PKCS7Padding")
 }
+
+interface KeyObfuscator {
+
+    fun obfuscate(rawKey: String): String
+
+}
