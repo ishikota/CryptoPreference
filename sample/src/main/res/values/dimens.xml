@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dialog_edit_pref_title_text">20sp</dimen>
+    <dimen name="dialog_edit_pref_item_margin">16dp</dimen>
+    <dimen name="dialog_edit_pref_button_text">16sp</dimen>
+</resources>
