@@ -2,6 +2,7 @@ package jp.ishikota.cryptopreference.cryptor
 
 import jp.ishikota.cryptopreference.Algorithm
 import jp.ishikota.cryptopreference.BlockMode
+import jp.ishikota.cryptopreference.CipherException
 import jp.ishikota.cryptopreference.Padding
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainer
 import jp.ishikota.cryptopreference.preference.plain.PlainPreference
@@ -26,7 +27,11 @@ internal class CipherCryptor(
             init(Cipher.ENCRYPT_MODE, secretKey)
             plainPreference.saveIv(alias, iv)
         }
-        return cipher.doFinal(plain.toByteArray())
+        try {
+            return cipher.doFinal(plain.toByteArray())
+        } catch (e: Exception) {
+            throw CipherException(e)
+        }
     }
 
     override fun decrypt(
@@ -39,7 +44,11 @@ internal class CipherCryptor(
         val cipher = Cipher.getInstance(transformation).apply {
             init(Cipher.DECRYPT_MODE, secretKey, IvParameterSpec(iv))
         }
-        return cipher.doFinal(encrypted)
+        try {
+            return cipher.doFinal(encrypted)
+        } catch (e: Exception) {
+            throw CipherException(e)
+        }
     }
 
     private fun genTransformation(

@@ -86,3 +86,5 @@ interface KeyObfuscator {
     fun obfuscate(rawKey: String): String
 
 }
+
+class CipherException(e: Exception): RuntimeException(e)
