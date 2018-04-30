@@ -1,58 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             xmlns:app="http://schemas.android.com/apk/res-auto"
-                                             xmlns:tools="http://schemas.android.com/tools"
-                                             android:layout_width="match_parent"
-                                             android:layout_height="match_parent"
-                                             tools:context="jp.ishikota.cryptopreference.sample.MainActivity"
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="jp.ishikota.cryptopreference.sample.MainActivity"
         >
-
-    <EditText
-            android:id="@+id/edit_key"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="enter key"
-            app:layout_constraintBottom_toTopOf="@+id/edit_value"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_get"
-            />
-
-    <EditText
-            android:id="@+id/edit_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="enter value"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_key"
-            />
-
-    <Button
-            android:id="@+id/button_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="save"
-            app:layout_constraintBottom_toTopOf="@+id/button_get"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-
-    <Button
-            android:id="@+id/button_get"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="get"
-            app:layout_constraintBottom_toTopOf="@+id/edit_key"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_save"
-            />
 
 </android.support.constraint.ConstraintLayout>

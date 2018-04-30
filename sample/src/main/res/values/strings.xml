@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">CryptoPreferenceSample</string>
 
+    <string name="menu_edit_pref">EDIT</string>
+
     <string name="dialog_edit_pref_title">Edit Preference</string>
     <string name="dialog_edit_pref_label_key">Key</string>
     <string name="dialog_edit_pref_edit_key_hint">key_some_secret</string>
