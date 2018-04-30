@@ -12,4 +12,7 @@
     <string name="dialog_edit_pref_error_empty_key_value">keyとvalueが入力されていません</string>
     <string name="dialog_edit_pref_error_empty_key">keyが入力されていません</string>
     <string name="dialog_edit_pref_error_empty_value">valueが入力されていません</string>
+
+    <string name="recyclerview_pref_entry_label_key">key</string>
+    <string name="recyclerview_pref_entry_label_value">value</string>
 </resources>

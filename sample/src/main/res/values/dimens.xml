@@ -3,4 +3,11 @@
     <dimen name="dialog_edit_pref_title_text">20sp</dimen>
     <dimen name="dialog_edit_pref_item_margin">16dp</dimen>
     <dimen name="dialog_edit_pref_button_text">16sp</dimen>
+
+    <dimen name="recyclerview_pref_entry_delete_button">24dp</dimen>
+    <dimen name="recyclerview_pref_entry_padding">16dp</dimen>
+    <dimen name="recyclerview_pref_label_text">18sp</dimen>
+    <dimen name="recyclerview_pref_text">14sp</dimen>
+    <dimen name="recyclerview_pref_text_secondary">12sp</dimen>
+    <dimen name="recyclerview_pref_text_margin_horizontal">8dp</dimen>
 </resources>
