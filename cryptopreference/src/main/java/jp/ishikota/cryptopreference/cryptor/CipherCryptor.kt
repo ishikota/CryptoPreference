@@ -21,6 +21,9 @@ internal class CipherCryptor(
         alias: String,
         plain: String
     ): ByteArray {
+        if (plain.isEmpty()) {
+            return "".toByteArray()
+        }
         val transformation = genTransformation(algorithm, blockMode, padding)
         val secretKey = secretKeyContainer.getOrGenerateNewKey(alias, algorithm, blockMode, padding)
         val cipher = Cipher.getInstance(transformation).apply {
@@ -38,6 +41,9 @@ internal class CipherCryptor(
         alias: String,
         encrypted: ByteArray
     ): ByteArray {
+        if (encrypted.isEmpty()) {
+            return "".toByteArray()
+        }
         val transformation = genTransformation(algorithm, blockMode, padding)
         val secretKey = secretKeyContainer.getOrGenerateNewKey(alias, algorithm, blockMode, padding)
         val iv = plainPreference.getIv(alias)
