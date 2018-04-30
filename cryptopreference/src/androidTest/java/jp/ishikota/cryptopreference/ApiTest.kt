@@ -2,7 +2,9 @@ package jp.ishikota.cryptopreference
 
 import android.content.Context
 import android.support.test.InstrumentationRegistry
+import jp.ishikota.cryptopreference.preference.obfuscator.Sha256Obfuscator
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertTrue
 import org.junit.After
 import org.junit.Test
 
@@ -17,6 +19,7 @@ class ApiTest {
             preferenceName = null
             secretKeyForCompat = null
             debugMode = false
+            keyObfuscator = Sha256Obfuscator()
         }
     }
 
@@ -52,6 +55,27 @@ class ApiTest {
         val encryptedPref = CryptoPreference.create(context, Algorithm.AES, BlockMode.CBC, Padding.PKCS7)
         val value = encryptedPref.getPrivateString("HOGE")
         assertEquals(value, "")
+    }
+
+    @Test
+    fun overrideKeyObfuscationLogic() {
+        val context = InstrumentationRegistry.getTargetContext()
+
+        // replace obfuscator
+        val reverseObfuscator = object: KeyObfuscator {
+            override fun obfuscate(rawKey: String): String = rawKey.reversed()
+        }
+        CryptoPreference.Initializer.also {
+            it.preferenceName = preferenceName
+            it.secretKeyForCompat = "1234567890123456".toByteArray()
+            it.keyObfuscator = reverseObfuscator
+        }
+
+        val encryptedPref = CryptoPreference.create(context, Algorithm.AES, BlockMode.CBC, Padding.PKCS7)
+        encryptedPref.savePrivateString("HOGE", "FUGA")
+
+        val rawPreference = context.getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
+        assertTrue(rawPreference.contains("HOGE".reversed()))
     }
 
     private fun cleanupPreference() {

@@ -4,6 +4,7 @@ import android.content.Context
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainerFactory
 import jp.ishikota.cryptopreference.preference.encrypted.EncryptedPreference
 import jp.ishikota.cryptopreference.preference.encrypted.EncryptedPreferenceFactory
+import jp.ishikota.cryptopreference.preference.obfuscator.Sha256Obfuscator
 import jp.ishikota.cryptopreference.preference.plain.PlainPreferenceFactory
 
 class CryptoPreference {
@@ -21,7 +22,7 @@ class CryptoPreference {
                 throw InitializationException()
             }
 
-            val plainPreferenceFactory = PlainPreferenceFactory(Initializer.preferenceName!!)
+            val plainPreferenceFactory = PlainPreferenceFactory(Initializer.preferenceName!!, keyObfuscator = Initializer.keyObfuscator)
             val secretKeyContainer = SecretKeyContainerFactory(Initializer.secretKeyForCompat).create()
             val plainPreference = plainPreferenceFactory.create(context, Initializer.debugMode)
             return encryptedPreferenceFactory.create(
@@ -44,6 +45,8 @@ class CryptoPreference {
             var preferenceName: String? = null
 
             var debugMode: Boolean = false
+
+            var keyObfuscator: KeyObfuscator = Sha256Obfuscator()
 
             internal fun isInitialized() =
                 secretKeyForCompat != null &&
