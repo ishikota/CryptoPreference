@@ -1,4 +1,4 @@
-package jp.ishikota.cryptopreference.sample
+package jp.ishikota.cryptopreference.sample.ui.main
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.View
 import android.widget.Toast
+import jp.ishikota.cryptopreference.sample.R
 import kotlinx.android.synthetic.main.dialog_edit_preference.view.*
 
 class EditPreferenceDialog: DialogFragment() {

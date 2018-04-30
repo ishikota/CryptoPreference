@@ -1,10 +1,11 @@
-package jp.ishikota.cryptopreference.sample
+package jp.ishikota.cryptopreference.sample.ui.main
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import jp.ishikota.cryptopreference.sample.R
 
 class MainActivity : AppCompatActivity(), EditPreferenceDialog.Listener {
 
