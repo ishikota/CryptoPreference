@@ -18,9 +18,7 @@ class CryptoPreference {
             blockMode: BlockMode,
             padding: Padding): EncryptedPreference {
 
-            if (!Initializer.isInitialized()) {
-                throw InitializationException()
-            }
+            Initializer.checkInitialization()?.let { throw it }
 
             val plainPreferenceFactory = PlainPreferenceFactory(Initializer.preferenceName!!, keyObfuscator = Initializer.keyObfuscator)
             val secretKeyContainer = SecretKeyContainerFactory(Initializer.secretKeyForCompat).create()
@@ -48,15 +46,28 @@ class CryptoPreference {
 
             var keyObfuscator: KeyObfuscator = Sha256Obfuscator()
 
-            internal fun isInitialized() =
-                secretKeyForCompat != null &&
-                    preferenceName != null
+            private fun useCompat() = android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M
+
+            internal fun checkInitialization(): Exception? {
+                val errorMessages = arrayListOf<String>()
+                if (useCompat() && secretKeyForCompat == null) {
+                    errorMessages.add("secretKeyForCompat is not set but current device is prior to android.os.Build.VERSION_CODES.M")
+                }
+                if (preferenceName == null) {
+                    errorMessages.add("preferenceName is not set.")
+                }
+                return if (errorMessages.isEmpty()) {
+                    null
+                } else {
+                    InitializationException(errorMessages.toString())
+                }
+            }
         }
 
     }
 }
 
-class InitializationException: RuntimeException()
+class InitializationException(msg: String): RuntimeException(msg)
 
 enum class Algorithm(val label: String) {
     AES("AES")
