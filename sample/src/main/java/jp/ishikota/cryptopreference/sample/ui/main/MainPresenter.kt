@@ -2,6 +2,7 @@ package jp.ishikota.cryptopreference.sample.ui.main
 
 import android.content.SharedPreferences
 import jp.ishikota.cryptopreference.preference.encrypted.EncryptedPreference
+import jp.ishikota.cryptopreference.preference.obfuscator.Sha256Obfuscator
 
 class MainPresenter(
     private val view: Contract.View,
@@ -9,6 +10,8 @@ class MainPresenter(
     private val libraryInternalPreference: SharedPreferences,
     appPreference: SharedPreferences
 ) : Contract.Presenter {
+
+    private val obfuscator = Sha256Obfuscator()
 
     private val entryRecorder = EntryRecorder(appPreference)
 
@@ -38,9 +41,9 @@ class MainPresenter(
     }
 
     private fun keyToEntry(originalKey: String): Contract.PreferenceEntry {
-        val obfuscatedKey = originalKey
+        val obfuscatedKey = obfuscator.obfuscate(originalKey)
         val originalValue = encryptedPreference.getPrivateString(originalKey)
-        val encryptedValue = libraryInternalPreference.getString(originalKey, "error")
+        val encryptedValue = libraryInternalPreference.getString(obfuscatedKey, "error")
         return Contract.PreferenceEntry(
             originalKey,
             obfuscatedKey,
