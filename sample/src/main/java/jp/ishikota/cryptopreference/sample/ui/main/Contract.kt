@@ -20,4 +20,10 @@ interface Contract {
         fun onEntryDeleteRequested(target: PreferenceEntry)
     }
 
+    interface Interactor {
+        fun fetchEntries(): List<PreferenceEntry>
+        fun saveEntry(key: String, value: String)
+        fun deleteEntry(key: String)
+    }
+
 }

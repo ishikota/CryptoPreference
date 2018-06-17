@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity(),
         setupRecyclerView()
 
         val encryptedPref = CryptoPreference.create(this, Algorithm.AES, BlockMode.CBC, Padding.PKCS7)
-        presenter = MainPresenter(this, encryptedPref, genLibraryInternalPreference(), genAppPreference())
+        val interactor = MainInteractor(encryptedPref, genLibraryInternalPreference(), genAppPreference())
+        presenter = MainPresenter(this, interactor)
 
         presenter.onPreferenceEntriesRequested()
     }
