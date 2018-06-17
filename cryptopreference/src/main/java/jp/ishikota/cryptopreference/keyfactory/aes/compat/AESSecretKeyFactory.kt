@@ -1,9 +1,9 @@
-package jp.ishikota.cryptopreference.keycontainer.compat
+package jp.ishikota.cryptopreference.keyfactory.aes.compat
 
 import jp.ishikota.cryptopreference.Algorithm
 import jp.ishikota.cryptopreference.BlockMode
 import jp.ishikota.cryptopreference.Padding
-import jp.ishikota.cryptopreference.keycontainer.SecretKeyFactory
+import jp.ishikota.cryptopreference.keyfactory.SecretKeyFactory
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 

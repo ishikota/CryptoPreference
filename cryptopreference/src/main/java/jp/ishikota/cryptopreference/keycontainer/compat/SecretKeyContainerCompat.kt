@@ -4,7 +4,8 @@ import jp.ishikota.cryptopreference.Algorithm
 import jp.ishikota.cryptopreference.BlockMode
 import jp.ishikota.cryptopreference.Padding
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainer
-import jp.ishikota.cryptopreference.keycontainer.SecretKeyFactory
+import jp.ishikota.cryptopreference.keyfactory.SecretKeyFactory
+import jp.ishikota.cryptopreference.keyfactory.aes.compat.AESSecretKeyFactory
 import java.security.Key
 
 internal class SecretKeyContainerCompat(private val secret: ByteArray): SecretKeyContainer {

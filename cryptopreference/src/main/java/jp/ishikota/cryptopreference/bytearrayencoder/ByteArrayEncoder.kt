@@ -1,4 +1,4 @@
-package jp.ishikota.cryptopreference.preference.bytearrayencoder
+package jp.ishikota.cryptopreference.bytearrayencoder
 
 interface ByteArrayEncoder {
 

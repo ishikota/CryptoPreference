@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import jp.ishikota.cryptopreference.KeyObfuscator
-import jp.ishikota.cryptopreference.preference.bytearrayencoder.ByteArrayEncoder
+import jp.ishikota.cryptopreference.bytearrayencoder.ByteArrayEncoder
 
 internal class PlainPreferenceImpl(
     private val context: Context,

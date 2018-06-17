@@ -1,4 +1,4 @@
-package jp.ishikota.cryptopreference.preference.obfuscator
+package jp.ishikota.cryptopreference.obfuscator
 
 import junit.framework.Assert.assertEquals
 import org.junit.Test

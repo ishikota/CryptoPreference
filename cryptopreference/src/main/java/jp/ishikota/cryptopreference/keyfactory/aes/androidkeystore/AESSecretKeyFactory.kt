@@ -1,4 +1,4 @@
-package jp.ishikota.cryptopreference.keycontainer.androidkeystore
+package jp.ishikota.cryptopreference.keyfactory.aes.androidkeystore
 
 import android.annotation.TargetApi
 import android.os.Build
@@ -7,7 +7,7 @@ import android.security.keystore.KeyProperties
 import jp.ishikota.cryptopreference.Algorithm
 import jp.ishikota.cryptopreference.BlockMode
 import jp.ishikota.cryptopreference.Padding
-import jp.ishikota.cryptopreference.keycontainer.SecretKeyFactory
+import jp.ishikota.cryptopreference.keyfactory.SecretKeyFactory
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 

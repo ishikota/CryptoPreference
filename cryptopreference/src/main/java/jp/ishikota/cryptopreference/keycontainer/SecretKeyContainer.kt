@@ -3,6 +3,7 @@ package jp.ishikota.cryptopreference.keycontainer
 import jp.ishikota.cryptopreference.Algorithm
 import jp.ishikota.cryptopreference.BlockMode
 import jp.ishikota.cryptopreference.Padding
+import jp.ishikota.cryptopreference.keyfactory.SecretKeyFactory
 import java.security.Key
 
 internal interface SecretKeyContainer {

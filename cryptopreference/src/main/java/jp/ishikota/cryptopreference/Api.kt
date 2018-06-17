@@ -4,7 +4,7 @@ import android.content.Context
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainerFactory
 import jp.ishikota.cryptopreference.preference.encrypted.EncryptedPreference
 import jp.ishikota.cryptopreference.preference.encrypted.EncryptedPreferenceFactory
-import jp.ishikota.cryptopreference.preference.obfuscator.Sha256Obfuscator
+import jp.ishikota.cryptopreference.obfuscator.Sha256Obfuscator
 import jp.ishikota.cryptopreference.preference.plain.PlainPreferenceFactory
 
 class CryptoPreference {

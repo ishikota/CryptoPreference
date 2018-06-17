@@ -5,8 +5,8 @@ import jp.ishikota.cryptopreference.BlockMode
 import jp.ishikota.cryptopreference.Padding
 import jp.ishikota.cryptopreference.cryptor.CipherCryptor
 import jp.ishikota.cryptopreference.keycontainer.SecretKeyContainer
-import jp.ishikota.cryptopreference.preference.bytearrayencoder.Base64Encoder
-import jp.ishikota.cryptopreference.preference.bytearrayencoder.ByteArrayEncoder
+import jp.ishikota.cryptopreference.bytearrayencoder.Base64Encoder
+import jp.ishikota.cryptopreference.bytearrayencoder.ByteArrayEncoder
 import jp.ishikota.cryptopreference.preference.plain.PlainPreference
 
 internal class EncryptedPreferenceFactory {

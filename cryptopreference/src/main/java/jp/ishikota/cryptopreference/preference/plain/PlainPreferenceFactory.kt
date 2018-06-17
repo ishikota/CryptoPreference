@@ -2,9 +2,9 @@ package jp.ishikota.cryptopreference.preference.plain
 
 import android.content.Context
 import jp.ishikota.cryptopreference.KeyObfuscator
-import jp.ishikota.cryptopreference.preference.bytearrayencoder.Base64Encoder
-import jp.ishikota.cryptopreference.preference.bytearrayencoder.ByteArrayEncoder
-import jp.ishikota.cryptopreference.preference.obfuscator.Sha256Obfuscator
+import jp.ishikota.cryptopreference.bytearrayencoder.Base64Encoder
+import jp.ishikota.cryptopreference.bytearrayencoder.ByteArrayEncoder
+import jp.ishikota.cryptopreference.obfuscator.Sha256Obfuscator
 
 internal class PlainPreferenceFactory(
     private val preferenceName: String,

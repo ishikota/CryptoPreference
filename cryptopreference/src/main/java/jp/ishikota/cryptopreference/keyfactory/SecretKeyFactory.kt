@@ -1,4 +1,4 @@
-package jp.ishikota.cryptopreference.keycontainer
+package jp.ishikota.cryptopreference.keyfactory
 
 import jp.ishikota.cryptopreference.Algorithm
 import jp.ishikota.cryptopreference.BlockMode

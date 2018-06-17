@@ -1,4 +1,4 @@
-package jp.ishikota.cryptopreference.preference.obfuscator
+package jp.ishikota.cryptopreference.obfuscator
 
 import jp.ishikota.cryptopreference.KeyObfuscator
 import java.security.MessageDigest

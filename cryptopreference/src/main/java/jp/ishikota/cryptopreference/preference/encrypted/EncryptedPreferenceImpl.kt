@@ -2,7 +2,7 @@ package jp.ishikota.cryptopreference.preference.encrypted
 
 import android.util.Log
 import jp.ishikota.cryptopreference.cryptor.Cryptor
-import jp.ishikota.cryptopreference.preference.bytearrayencoder.ByteArrayEncoder
+import jp.ishikota.cryptopreference.bytearrayencoder.ByteArrayEncoder
 import jp.ishikota.cryptopreference.preference.plain.PlainPreference
 
 internal class EncryptedPreferenceImpl(
