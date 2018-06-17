@@ -40,7 +40,7 @@ class ApiTest {
         val encryptedPref = CryptoPreference.create(context, Algorithm.AES, BlockMode.CBC, Padding.PKCS7)
         encryptedPref.savePrivateString("HOGE", "FUGA")
 
-        assertEquals("FUGA", encryptedPref.getPrivateString("HOGE"))
+        assertEquals("FUGA", encryptedPref.getPrivateString("HOGE", ""))
     }
 
     @Test
@@ -53,8 +53,8 @@ class ApiTest {
         }
 
         val encryptedPref = CryptoPreference.create(context, Algorithm.AES, BlockMode.CBC, Padding.PKCS7)
-        val value = encryptedPref.getPrivateString("HOGE")
-        assertEquals(value, "")
+        val value = encryptedPref.getPrivateString("HOGE", "default")
+        assertEquals("default", value)
     }
 
     @Test

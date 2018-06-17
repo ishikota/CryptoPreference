@@ -1,8 +1,8 @@
 package jp.ishikota.cryptopreference.preference.encrypted
 
 import android.util.Log
-import jp.ishikota.cryptopreference.cryptor.Cryptor
 import jp.ishikota.cryptopreference.bytearrayencoder.ByteArrayEncoder
+import jp.ishikota.cryptopreference.cryptor.Cryptor
 import jp.ishikota.cryptopreference.preference.plain.PlainPreference
 
 internal class EncryptedPreferenceImpl(
@@ -17,7 +17,7 @@ internal class EncryptedPreferenceImpl(
         plainPreference.saveString(key, encoded)
     }
 
-    override fun getPrivateString(key: String): String {
+    override fun getPrivateString(key: String, default: String): String {
         return if (plainPreference.hasStringKey(key) && plainPreference.hasIvKey(key)) {
             val encoded = plainPreference.getString(key)
             val encrypted = byteArrayEncoder.decode(encoded)
@@ -25,7 +25,7 @@ internal class EncryptedPreferenceImpl(
             String(plainByteArray)
         } else {
             Log.w("CryptoPreference", "Entry with key $key is not saved. So return default value.")
-            ""
+            default
         }
     }
 

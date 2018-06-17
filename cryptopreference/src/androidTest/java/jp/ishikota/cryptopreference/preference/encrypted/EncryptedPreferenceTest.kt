@@ -50,7 +50,7 @@ class EncryptedPreferenceTest {
         val textToSave = "This is very important string."
         val encryptedPref = genAndroidKeystoreBackendPref()
         encryptedPref.savePrivateString(KEY_PREF, textToSave)
-        val fetched = encryptedPref.getPrivateString(KEY_PREF)
+        val fetched = encryptedPref.getPrivateString(KEY_PREF, "")
         assertEquals(textToSave, fetched)
     }
 
@@ -59,8 +59,15 @@ class EncryptedPreferenceTest {
         val textToSave = "This is very important string."
         val encryptedPref = genCompatKeystoreBackendPref()
         encryptedPref.savePrivateString(KEY_PREF, textToSave)
-        val fetched = encryptedPref.getPrivateString(KEY_PREF)
+        val fetched = encryptedPref.getPrivateString(KEY_PREF, "")
         assertEquals(textToSave, fetched)
+    }
+
+    @Test
+    fun getPrivateStringReturnsDefault() {
+        val encryptedPref = genAndroidKeystoreBackendPref()
+        val fetched = encryptedPref.getPrivateString(KEY_PREF, "default")
+        assertEquals("default", fetched)
     }
 
     @Test
