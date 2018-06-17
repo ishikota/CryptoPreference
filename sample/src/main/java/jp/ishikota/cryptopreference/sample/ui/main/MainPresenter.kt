@@ -1,8 +1,8 @@
 package jp.ishikota.cryptopreference.sample.ui.main
 
 import android.content.SharedPreferences
+import jp.ishikota.cryptopreference.obfuscator.Sha256Obfuscator
 import jp.ishikota.cryptopreference.preference.encrypted.EncryptedPreference
-import jp.ishikota.cryptopreference.preference.obfuscator.Sha256Obfuscator
 
 class MainPresenter(
     private val view: Contract.View,
