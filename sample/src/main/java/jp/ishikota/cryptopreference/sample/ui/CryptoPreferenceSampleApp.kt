@@ -11,7 +11,8 @@ class CryptoPreferenceSampleApp: Application() {
 
         // setup for  CryptoPreference
         CryptoPreference.Initializer.apply {
-            secretKeyForCompat = byteArrayOf()
+            secretKeyForCompat = "0123456789123456".toByteArray()
+            debugMode = true
             preferenceName = CRYPTO_PREFERENCE_NAME
         }
 
