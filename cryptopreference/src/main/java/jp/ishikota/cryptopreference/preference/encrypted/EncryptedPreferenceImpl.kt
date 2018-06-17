@@ -1,29 +1,40 @@
 package jp.ishikota.cryptopreference.preference.encrypted
 
-import jp.ishikota.cryptopreference.cipher.CipherLogic
-import jp.ishikota.cryptopreference.preference.encrypted.encoder.ByteArrayEncoder
+import android.util.Log
+import jp.ishikota.cryptopreference.bytearrayencoder.ByteArrayEncoder
+import jp.ishikota.cryptopreference.cryptor.Cryptor
 import jp.ishikota.cryptopreference.preference.plain.PlainPreference
 
 internal class EncryptedPreferenceImpl(
-    private val cipher: CipherLogic,
+    private val criptor: Cryptor,
     private val plainPreference: PlainPreference,
-    private val byteArrayEncoder: ByteArrayEncoder
+    private val byteArrayEncoder: ByteArrayEncoder,
+    private val debugMode: Boolean
 ): EncryptedPreference {
 
-    override fun saveString(key: String, plainText: String) {
-        val encrypted = cipher.encrypt(key, plainText)
+    override fun savePrivateString(key: String, value: String) {
+        val encrypted = criptor.encrypt(key, value)
         val encoded = byteArrayEncoder.encode(encrypted)
         plainPreference.saveString(key, encoded)
     }
 
-    // return empty string if failed to decrypt
-    override fun getString(key: String): String {
-        return if (!plainPreference.hasKey(key)) {
-            ""
-        } else {
+    override fun getPrivateString(key: String, default: String): String {
+        return if (plainPreference.hasStringKey(key) && plainPreference.hasIvKey(key)) {
             val encoded = plainPreference.getString(key)
             val encrypted = byteArrayEncoder.decode(encoded)
-            cipher.decrypt(key, encrypted)
+            val plainByteArray = criptor.decrypt(key, encrypted)
+            String(plainByteArray)
+        } else {
+            if (debugMode) {
+                Log.w("CryptoPreference", "Entry with key $key is not saved. So return default value.")
+            }
+            default
         }
     }
+
+    override fun deletePrivateString(key: String) {
+        plainPreference.deleteString(key)
+        plainPreference.deleteIv(key)
+    }
+
 }

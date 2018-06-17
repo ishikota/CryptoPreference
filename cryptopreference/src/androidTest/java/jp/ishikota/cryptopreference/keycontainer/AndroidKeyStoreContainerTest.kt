@@ -1,8 +1,12 @@
 package jp.ishikota.cryptopreference.keycontainer
 
 import android.support.test.runner.AndroidJUnit4
-import junit.framework.Assert
-import junit.framework.Assert.assertEquals
+import jp.ishikota.cryptopreference.Algorithm
+import jp.ishikota.cryptopreference.BlockMode
+import jp.ishikota.cryptopreference.Padding
+import jp.ishikota.cryptopreference.keycontainer.androidkeystore.AndroidKeyStoreContainer
+import junit.framework.Assert.assertFalse
+import junit.framework.Assert.assertTrue
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -13,6 +17,12 @@ class AndroidKeyStoreContainerTest {
 
     private lateinit var keyContainer: AndroidKeyStoreContainer
 
+    private val AES = Algorithm.AES
+
+    private val CBC = BlockMode.CBC
+
+    private val PKCS7 = Padding.PKCS7
+
     @Before
     fun setup() {
         keyContainer = AndroidKeyStoreContainer()
@@ -20,56 +30,58 @@ class AndroidKeyStoreContainerTest {
 
     @After
     fun tearUp() {
-        keyContainer.getAliases().forEach {
-            keyContainer.deleteKey(it)
-        }
+        keyContainer.deleteKey(ALIAS_1, AES, CBC, PKCS7)
+        keyContainer.deleteKey(ALIAS_2, AES, CBC, PKCS7)
     }
 
     @Test
-    fun testGetKeyAndGenerateNewKey() {
-        assertEquals(0, keyContainer.getAliases().size)
-        keyContainer.getKey(ALIAS_1)
-        assertEquals(1, keyContainer.getAliases().size)
-
+    fun testGenerateNewKey() {
+        assertFalse(keyContainer.hasKey(ALIAS_1, AES, CBC, PKCS7))
+        keyContainer.getOrGenerateNewKey(ALIAS_1, AES, CBC, PKCS7)
+        assertTrue(keyContainer.hasKey(ALIAS_1, AES, CBC, PKCS7))
     }
 
     @Test
-    fun testGetKeyAndFetchGeneratedKey() {
-        val alias1Generated = keyContainer.getKey(ALIAS_1)
-        assertEquals(1, keyContainer.getAliases().size)
-
-        val alias1Fetched = keyContainer.getKey(ALIAS_1)
-        assertEquals(alias1Generated, alias1Fetched)
-
-        val alias2Generated = keyContainer.getKey(ALIAS_2)
-        assertEquals(2, keyContainer.getAliases().size)
-
-        val alias2Fetched = keyContainer.getKey(ALIAS_2)
-        assertEquals(alias2Generated, alias2Fetched)
-        Assert.assertFalse(alias1Generated == alias2Fetched)
+    fun testGetSavedKey() {
+        val generated = keyContainer.getOrGenerateNewKey(ALIAS_1, AES, CBC, PKCS7)
+        val another = keyContainer.getOrGenerateNewKey(ALIAS_2, AES, CBC, PKCS7)
+        val saved = keyContainer.getOrGenerateNewKey(ALIAS_1, AES, CBC, PKCS7)
+        assertTrue(generated == saved)
+        assertFalse(another == saved)
     }
 
     @Test
-    fun testDeleteKey() {
-        keyContainer.getKey(ALIAS_1)
-        assertEquals(1, keyContainer.getAliases().size)
+    fun testDeleteKeyWhenSameTransformation() {
+        keyContainer.getOrGenerateNewKey(ALIAS_1, AES, CBC, PKCS7)
+        assertTrue(keyContainer.hasKey(ALIAS_1, AES, CBC, PKCS7))
 
-        keyContainer.deleteKey(ALIAS_1)
-        assertEquals(0, keyContainer.getAliases().size)
+        keyContainer.deleteKey(ALIAS_1, AES, CBC, PKCS7)
+
+        assertFalse(keyContainer.hasKey(ALIAS_1, AES, CBC, PKCS7))
+    }
+
+    @Test
+    fun testDeleteKeyWhenDifferentTransformation() {
+        keyContainer.getOrGenerateNewKey(ALIAS_1, AES, CBC, PKCS7)
+        keyContainer.getOrGenerateNewKey(ALIAS_2, AES, CBC, PKCS7)
+
+        keyContainer.deleteKey(ALIAS_1, AES, CBC, PKCS7)
+
+        assertFalse(keyContainer.hasKey(ALIAS_1, AES, CBC, PKCS7))
+        assertTrue(keyContainer.hasKey(ALIAS_2, AES, CBC, PKCS7))
     }
 
     @Test
     fun testDeleteKeyWithoutEntry() {
-        keyContainer.deleteKey(ALIAS_1)
-        assertEquals(0, keyContainer.getAliases().size)
+        keyContainer.deleteKey(ALIAS_1, AES, CBC, PKCS7)
+        assertFalse(keyContainer.hasKey(ALIAS_1, AES, CBC, PKCS7))
     }
 
     @Test
-    fun testGetAliases() {
-        keyContainer.getKey(ALIAS_2)
-        keyContainer.getKey(ALIAS_2)
-        keyContainer.getKey(ALIAS_1)
-        assertEquals(listOf(ALIAS_2, ALIAS_1), keyContainer.getAliases())
+    fun testHasKey() {
+        keyContainer.getOrGenerateNewKey(ALIAS_1, AES, CBC, PKCS7)
+        assertTrue(keyContainer.hasKey(ALIAS_1, AES, CBC, PKCS7))
+        assertFalse(keyContainer.hasKey(ALIAS_2, AES, CBC, PKCS7))
     }
 
     companion object {

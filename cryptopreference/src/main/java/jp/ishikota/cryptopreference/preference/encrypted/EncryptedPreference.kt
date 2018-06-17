@@ -2,8 +2,10 @@ package jp.ishikota.cryptopreference.preference.encrypted
 
 interface EncryptedPreference {
 
-    fun saveString(key: String, plainText: String)
+    fun savePrivateString(key: String, value: String)
 
-    fun getString(key: String): String
+    fun getPrivateString(key: String, default: String): String
+
+    fun deletePrivateString(key: String)
 
 }
