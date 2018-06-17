@@ -83,11 +83,11 @@ class EncryptedPreferenceTest {
     }
 
     private fun genAndroidKeystoreBackendPref() = encryptedPreferenceFactory.create(
-        androidKeystoreContainer, plainPreference, AES, CBC, PKCS7
+        androidKeystoreContainer, plainPreference, AES, CBC, PKCS7, true
     )
 
     private fun genCompatKeystoreBackendPref() = encryptedPreferenceFactory.create(
-        SecretKeyContainerCompat(SECRET_16_BYTE), plainPreference, AES, CBC, PKCS7
+        SecretKeyContainerCompat(SECRET_16_BYTE), plainPreference, AES, CBC, PKCS7, true
     )
 
     companion object {

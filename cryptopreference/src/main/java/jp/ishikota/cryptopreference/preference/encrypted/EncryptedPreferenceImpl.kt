@@ -8,7 +8,8 @@ import jp.ishikota.cryptopreference.preference.plain.PlainPreference
 internal class EncryptedPreferenceImpl(
     private val criptor: Cryptor,
     private val plainPreference: PlainPreference,
-    private val byteArrayEncoder: ByteArrayEncoder
+    private val byteArrayEncoder: ByteArrayEncoder,
+    private val debugMode: Boolean
 ): EncryptedPreference {
 
     override fun savePrivateString(key: String, value: String) {
@@ -24,7 +25,9 @@ internal class EncryptedPreferenceImpl(
             val plainByteArray = criptor.decrypt(key, encrypted)
             String(plainByteArray)
         } else {
-            Log.w("CryptoPreference", "Entry with key $key is not saved. So return default value.")
+            if (debugMode) {
+                Log.w("CryptoPreference", "Entry with key $key is not saved. So return default value.")
+            }
             default
         }
     }
