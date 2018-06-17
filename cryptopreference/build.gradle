@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'com.github.dcendents.android-maven'
+
+apply plugin: 'com.jfrog.bintray'
+
 android {
     compileSdkVersion 26
 
@@ -36,4 +40,64 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}
+
+bintray {
+
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    group = 'com.github.ishikota'
+    version = '0.1.0'
+    configurations = ['archives']
+    pkg {
+        repo = 'maven'
+        name = 'cryptopreference'
+        vcsUrl = 'git@github.com:ishikota/CryptoPreference.git'
+        licenses = ['Apache-2.0']
+        labels = ['android']
+        publicDownloadNumbers = true
+    }
+}
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                name 'cryptopreference'
+                url 'https://github.com/ishikota/CryptoPreference'
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'ishikota'
+                        name 'ishikota'
+                        email 'ishikota086@gmail.com'
+                    }
+                }
+                scm {
+                    connection 'https://github.com/ishikota/CryptoPreference.git'
+                    developerConnection 'https://github.com/ishikota/CryptoPreference.git'
+                    url 'https://github.com/ishikota/CryptoPreference'
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+task findConventions << {
+    println project.getConvention()
 }
