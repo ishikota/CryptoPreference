@@ -42,7 +42,7 @@ class MainPresenter(
 
     private fun keyToEntry(originalKey: String): Contract.PreferenceEntry {
         val obfuscatedKey = obfuscator.obfuscate(originalKey)
-        val originalValue = encryptedPreference.getPrivateString(originalKey)
+        val originalValue = encryptedPreference.getPrivateString(originalKey, "failed to fetch value with key=$originalKey.")
         val encryptedValue = libraryInternalPreference.getString(obfuscatedKey, "error")
         return Contract.PreferenceEntry(
             originalKey,
