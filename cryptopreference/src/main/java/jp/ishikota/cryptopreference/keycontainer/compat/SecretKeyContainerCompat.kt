@@ -8,7 +8,7 @@ import jp.ishikota.cryptopreference.keyfactory.SecretKeyFactory
 import jp.ishikota.cryptopreference.keyfactory.aes.compat.AESSecretKeyFactory
 import java.security.Key
 
-internal class SecretKeyContainerCompat(private val secret: ByteArray): SecretKeyContainer {
+internal class SecretKeyContainerCompat(secret: ByteArray): SecretKeyContainer {
 
     private val keyFactories = listOf(AESSecretKeyFactory(secret))
 
